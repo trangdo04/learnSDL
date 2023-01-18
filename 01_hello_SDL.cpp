@@ -9,13 +9,22 @@ and may not be redistributed without written permission.*/
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
+	//The window we'll be rendering to
+	SDL_Window* window = NULL;
+	
+	//The surface contained by the window
+	SDL_Surface* screenSurface = NULL;
+
+	//The image we will load and show on the screen
+	SDL_Surface* helloWorld = NULL;
+
 bool loadMedia(){
 	bool success = true;
 
-	helloWorld = SDL_LoadBMP( "C:\Users\trangdo\Documents\learnGit\MyFirstProject\capsule_616x353-7.jpg" );
+	helloWorld = SDL_LoadBMP( "MyFirstProject\capsule_616x353-7.jpg" );
     if(helloWorld == NULL )
     {
-        printf( "Unable to load image %s! SDL Error: %s\n", "C:\Users\trangdo\Documents\learnGit\MyFirstProject\capsule_616x353-7.jpg", SDL_GetError() );
+        printf( "Unable to load image %s! SDL Error: %s\n", "MyFirstProject\capsule_616x353-7.jpg", SDL_GetError() );
         success = false;
     }
 
@@ -38,11 +47,7 @@ void close()
 
 int main( int argc, char* args[] )
 {
-	//The window we'll be rendering to
-	SDL_Window* window = NULL;
 	
-	//The surface contained by the window
-	SDL_Surface* screenSurface = NULL;
 
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
@@ -67,7 +72,7 @@ int main( int argc, char* args[] )
 				screenSurface = SDL_GetWindowSurface( window );
 
 				//Fill the surface white
-				//SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
+				SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
 				
 				//Apply the image
             	SDL_BlitSurface( helloWorld, NULL, screenSurface, NULL );
@@ -82,10 +87,10 @@ int main( int argc, char* args[] )
 	}
 
 	//Destroy window
-	SDL_DestroyWindow( window );
+	//SDL_DestroyWindow( window );
 
 	//Quit SDL subsystems
-	SDL_Quit();
+	//SDL_Quit();
 
 	return 0;
 }
