@@ -24,3 +24,5 @@ OBJ_NAME = 01_hello_SDL
 #This is the target that compiles our executable
 all : $(OBJS)
 	$(CC) $(OBJS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+compile:
+	g++ -o $(OBJ_NAME).exe $(OBJ_NAME).cpp

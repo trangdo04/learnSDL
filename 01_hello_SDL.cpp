@@ -12,8 +12,8 @@ const int SCREEN_HEIGHT = 480;
 bool loadMedia(){
 	bool success = true;
 
-	 gHelloWorld = SDL_LoadBMP( "C:\Users\trangdo\Documents\learnGit\MyFirstProject\capsule_616x353-7.jpg" );
-    if( gHelloWorld == NULL )
+	helloWorld = SDL_LoadBMP( "C:\Users\trangdo\Documents\learnGit\MyFirstProject\capsule_616x353-7.jpg" );
+    if(helloWorld == NULL )
     {
         printf( "Unable to load image %s! SDL Error: %s\n", "C:\Users\trangdo\Documents\learnGit\MyFirstProject\capsule_616x353-7.jpg", SDL_GetError() );
         success = false;
@@ -25,12 +25,12 @@ bool loadMedia(){
 void close()
 {
     //Deallocate surface
-    SDL_FreeSurface( gHelloWorld );
-    gHelloWorld = NULL;
+    SDL_FreeSurface( helloWorld );
+    helloWorld = NULL;
 
     //Destroy window
-    SDL_DestroyWindow( gWindow );
-    gWindow = NULL;
+    SDL_DestroyWindow( window );
+    window = NULL;
 
     //Quit SDL subsystems
     SDL_Quit();
@@ -70,7 +70,7 @@ int main( int argc, char* args[] )
 				//SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
 				
 				//Apply the image
-            	SDL_BlitSurface( gHelloWorld, NULL, gScreenSurface, NULL );
+            	SDL_BlitSurface( helloWorld, NULL, screenSurface, NULL );
 
 				//Update the surface
 				SDL_UpdateWindowSurface( window );
