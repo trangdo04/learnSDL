@@ -12,6 +12,9 @@ const int SCREEN_HEIGHT = 480;
 const std::string TMP_PATH_TO_IMAGE = "./bmp_24.bmp";
 const char* PATH_TO_IMAGE = TMP_PATH_TO_IMAGE.c_str();
 
+const std::string TMP_PATH_TO_IMAGE_2 = "./capsule_616x353-7.bmp";
+const char* PATH_TO_IMAGE_2 = TMP_PATH_TO_IMAGE_2.c_str();
+
 	//The window we'll be rendering to
 	SDL_Window* window = NULL;
 	
@@ -33,6 +36,19 @@ bool loadMedia(){
 
     return success;
 }
+
+// bool loadSecondMedia(){
+// 	bool success = true;
+
+// 	helloWorld = SDL_LoadBMP(PATH_TO_IMAGE_2);
+//     if(helloWorld == NULL )
+//     {
+//         printf( "Unable to load image %s! SDL Error: %s\n", PATH_TO_IMAGE_2, SDL_GetError() );
+//         success = false;
+//     }
+
+//     return success;
+// }
 
 void close()
 {
@@ -89,11 +105,23 @@ int main( int argc, char* args[] )
 		}
 	}
 
+	bool quit = false;
+	SDL_Event e;
+
+	while(!quit){
+		while(SDL_PollEvent(&e) != 0){
+			if(e.type == SDL_QUIT){
+				//loadSecondMedia();
+				quit = true;
+			}
+		}
+	}
+
 	//Destroy window
-	//SDL_DestroyWindow( window );
+	SDL_DestroyWindow( window );
 
 	//Quit SDL subsystems
-	//SDL_Quit();
+	SDL_Quit();
 
 	return 0;
 }
