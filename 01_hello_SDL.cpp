@@ -4,10 +4,13 @@ and may not be redistributed without written permission.*/
 //Using SDL and standard IO
 #include <SDL.h>
 #include <stdio.h>
-
+#include <string>
 //Screen dimension constants
+
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
+const std::string TMP_PATH_TO_IMAGE = "./bmp_24.bmp";
+const char* PATH_TO_IMAGE = TMP_PATH_TO_IMAGE.c_str();
 
 	//The window we'll be rendering to
 	SDL_Window* window = NULL;
@@ -21,10 +24,10 @@ const int SCREEN_HEIGHT = 480;
 bool loadMedia(){
 	bool success = true;
 
-	helloWorld = SDL_LoadBMP( "MyFirstProject\capsule_616x353-7.jpg" );
+	helloWorld = SDL_LoadBMP(PATH_TO_IMAGE);
     if(helloWorld == NULL )
     {
-        printf( "Unable to load image %s! SDL Error: %s\n", "MyFirstProject\capsule_616x353-7.jpg", SDL_GetError() );
+        printf( "Unable to load image %s! SDL Error: %s\n", PATH_TO_IMAGE, SDL_GetError() );
         success = false;
     }
 
