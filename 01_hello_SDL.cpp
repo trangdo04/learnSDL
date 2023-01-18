@@ -9,6 +9,33 @@ and may not be redistributed without written permission.*/
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
+bool loadMedia(){
+	bool success = true;
+
+	 gHelloWorld = SDL_LoadBMP( "C:\Users\trangdo\Documents\learnGit\MyFirstProject\capsule_616x353-7.jpg" );
+    if( gHelloWorld == NULL )
+    {
+        printf( "Unable to load image %s! SDL Error: %s\n", "C:\Users\trangdo\Documents\learnGit\MyFirstProject\capsule_616x353-7.jpg", SDL_GetError() );
+        success = false;
+    }
+
+    return success;
+}
+
+void close()
+{
+    //Deallocate surface
+    SDL_FreeSurface( gHelloWorld );
+    gHelloWorld = NULL;
+
+    //Destroy window
+    SDL_DestroyWindow( gWindow );
+    gWindow = NULL;
+
+    //Quit SDL subsystems
+    SDL_Quit();
+}
+
 int main( int argc, char* args[] )
 {
 	//The window we'll be rendering to
@@ -32,17 +59,25 @@ int main( int argc, char* args[] )
 		}
 		else
 		{
-			//Get window surface
-			screenSurface = SDL_GetWindowSurface( window );
+			if(!loadMedia()){
+				printf( "Failed to load media!\n" );
+			}
+			else{
+				//Get window surface
+				screenSurface = SDL_GetWindowSurface( window );
 
-			//Fill the surface white
-			SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
-			
-			//Update the surface
-			SDL_UpdateWindowSurface( window );
-            
-            //Hack to get window to stay up
-            SDL_Event e; bool quit = false; while( quit == false ){ while( SDL_PollEvent( &e ) ){ if( e.type == SDL_QUIT ) quit = true; } }
+				//Fill the surface white
+				//SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0xFF, 0xFF, 0xFF ) );
+				
+				//Apply the image
+            	SDL_BlitSurface( gHelloWorld, NULL, gScreenSurface, NULL );
+
+				//Update the surface
+				SDL_UpdateWindowSurface( window );
+				
+				//Hack to get window to stay up
+				SDL_Event e; bool quit = false; while( quit == false ){ while( SDL_PollEvent( &e ) ){ if( e.type == SDL_QUIT ) quit = true; } }
+			}
 		}
 	}
 
