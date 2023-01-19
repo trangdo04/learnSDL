@@ -45,6 +45,40 @@ SDL_Surface* gKeyPressSurfaces[ KEY_PRESS_SURFACE_TOTAL ];
 //Current displayed image
 SDL_Surface* gCurrentSurface = NULL;
 
+SDL_Surface* loadSurface( std::string path )
+{
+	//The final optimized image
+	SDL_Surface* optimizedSurface = NULL;
+
+	//Load image at specified path
+	SDL_Surface* loadedSurface = SDL_LoadBMP( path.c_str() );
+	if( loadedSurface == NULL )
+	{
+		printf( "Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+	}
+		else
+	{
+		//Convert surface to screen format
+		optimizedSurface = SDL_ConvertSurface( loadedSurface, gScreenSurface->format, 0 );
+		if( optimizedSurface == NULL )
+		{
+			printf( "Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+		}
+
+		//Get rid of old loaded surface
+		SDL_FreeSurface( loadedSurface );
+	}
+
+	// //Apply the image stretched
+	// 	SDL_Rect stretchRect;
+	// 	stretchRect.x = 0;
+	// 	stretchRect.y = 0;
+	// 	stretchRect.w = SCREEN_WIDTH;
+	// 	stretchRect.h = SCREEN_HEIGHT;
+	// 	SDL_BlitScaled( path.c_str(), NULL, gScreenSurface, &stretchRect );
+	return optimizedSurface;
+}
+
 bool init()
 {
 	//Initialization flag
@@ -140,18 +174,17 @@ void close()
 	SDL_Quit();
 }
 
-SDL_Surface* loadSurface( std::string path )
-{
-	//Load image at specified path
-	SDL_Surface* loadedSurface = SDL_LoadBMP( path.c_str() );
-	if( loadedSurface == NULL )
-	{
-		printf( "Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-	}
+// SDL_Surface* loadSurface( std::string path )
+// {
+// 	//Load image at specified path
+// 	SDL_Surface* loadedSurface = SDL_LoadBMP( path.c_str() );
+// 	if( loadedSurface == NULL )
+// 	{
+// 		printf( "Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+// 	}
 
-	return loadedSurface;
-}
-
+// 	return loadedSurface;
+// }
 
 int main( int argc, char* args[] )
 {
@@ -217,6 +250,8 @@ int main( int argc, char* args[] )
 						}
 					}
 				}
+
+				
 
 				//Apply the current image
 				SDL_BlitSurface( gCurrentSurface, NULL, gScreenSurface, NULL );
