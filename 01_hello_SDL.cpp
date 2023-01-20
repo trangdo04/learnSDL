@@ -3,6 +3,7 @@ and may not be redistributed without written permission.*/
 
 //Using SDL, standard IO, and strings
 #include <SDL.h>
+#include <SDL_image.h>
 #include <stdio.h>
 #include <string>
 
@@ -45,68 +46,128 @@ SDL_Surface* gKeyPressSurfaces[ KEY_PRESS_SURFACE_TOTAL ];
 //Current displayed image
 SDL_Surface* gCurrentSurface = NULL;
 
+// SDL_Surface* loadSurface( std::string path )
+// {
+// 	//The final optimized image
+// 	SDL_Surface* optimizedSurface = NULL;
+
+// 	//Load image at specified path
+// 	SDL_Surface* loadedSurface = SDL_LoadBMP( path.c_str() );
+// 	if( loadedSurface == NULL )
+// 	{
+// 		printf( "Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+// 	}
+// 		else
+// 	{
+// 		//Convert surface to screen format
+// 		optimizedSurface = SDL_ConvertSurface( loadedSurface, gScreenSurface->format, 0 );
+// 		if( optimizedSurface == NULL )
+// 		{
+// 			printf( "Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+// 		}
+
+// 		//Get rid of old loaded surface
+// 		SDL_FreeSurface( loadedSurface );
+// 	}
+
+// 	return optimizedSurface;
+// }
+
 SDL_Surface* loadSurface( std::string path )
 {
-	//The final optimized image
-	SDL_Surface* optimizedSurface = NULL;
+    //The final optimized image
+    SDL_Surface* optimizedSurface = NULL;
 
-	//Load image at specified path
-	SDL_Surface* loadedSurface = SDL_LoadBMP( path.c_str() );
-	if( loadedSurface == NULL )
-	{
-		printf( "Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-	}
-		else
-	{
-		//Convert surface to screen format
-		optimizedSurface = SDL_ConvertSurface( loadedSurface, gScreenSurface->format, 0 );
-		if( optimizedSurface == NULL )
-		{
-			printf( "Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-		}
+    //Load image at specified path
+    SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
+    if( loadedSurface == NULL )
+    {
+        printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+    }
+    else
+    {
+        //Convert surface to screen format
+        optimizedSurface = SDL_ConvertSurface( loadedSurface, gScreenSurface->format, 0 );
+        if( optimizedSurface == NULL )
+        {
+            printf( "Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+        }
 
-		//Get rid of old loaded surface
-		SDL_FreeSurface( loadedSurface );
-	}
+        //Get rid of old loaded surface
+        SDL_FreeSurface( loadedSurface );
+    }
 
-	// //Apply the image stretched
-	// 	SDL_Rect stretchRect;
-	// 	stretchRect.x = 0;
-	// 	stretchRect.y = 0;
-	// 	stretchRect.w = SCREEN_WIDTH;
-	// 	stretchRect.h = SCREEN_HEIGHT;
-	// 	SDL_BlitScaled( path.c_str(), NULL, gScreenSurface, &stretchRect );
-	return optimizedSurface;
+    return optimizedSurface;
 }
+
+// bool init()
+// {
+// 	//Initialization flag
+// 	bool success = true;
+
+// 	//Initialize SDL
+// 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+// 	{
+// 		printf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
+// 		success = false;
+// 	}
+// 	else
+// 	{
+// 		//Create window
+// 		gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+// 		if( gWindow == NULL )
+// 		{
+// 			printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
+// 			success = false;
+// 		}
+// 		else
+// 		{
+// 			//Get window surface
+// 			gScreenSurface = SDL_GetWindowSurface( gWindow );
+// 		}
+// 	}
+
+// 	return success;
+// }
 
 bool init()
 {
-	//Initialization flag
-	bool success = true;
+    //Initialization flag
+    bool success = true;
 
-	//Initialize SDL
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-	{
-		printf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
-		success = false;
-	}
-	else
-	{
-		//Create window
-		gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-		if( gWindow == NULL )
-		{
-			printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
-			success = false;
-		}
-		else
-		{
-			//Get window surface
-			gScreenSurface = SDL_GetWindowSurface( gWindow );
-		}
-	}
+    //Initialize SDL
+    if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+    {
+        printf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
+        success = false;
+    }
+    else
+    {
+        //Create window
+        gWindow = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+        if( gWindow == NULL )
+        {
+            printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
+            success = false;
+        }
+        else
+        {
+            //Initialize PNG loading
+            int imgFlags = IMG_INIT_PNG;
+            if( !( IMG_Init( imgFlags ) & imgFlags ) )
+            {
+                printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+                success = false;
+            }
+            else
+            {
+                //Get window surface
+                gScreenSurface = SDL_GetWindowSurface( gWindow );
+            }
+        }
+    }
 
-	return success;
+    return success;
 }
 
 bool loadMedia()
@@ -123,7 +184,7 @@ bool loadMedia()
 	}
 
 	//Load up surface
-	gKeyPressSurfaces[ KEY_PRESS_SURFACE_UP ] = loadSurface( "bmp_24.bmp" );
+	gKeyPressSurfaces[ KEY_PRESS_SURFACE_UP ] = loadSurface("capsule_616x353-7.jpg");
 	if( gKeyPressSurfaces[ KEY_PRESS_SURFACE_UP ] == NULL )
 	{
 		printf( "Failed to load up image!\n" );
@@ -174,18 +235,6 @@ void close()
 	SDL_Quit();
 }
 
-// SDL_Surface* loadSurface( std::string path )
-// {
-// 	//Load image at specified path
-// 	SDL_Surface* loadedSurface = SDL_LoadBMP( path.c_str() );
-// 	if( loadedSurface == NULL )
-// 	{
-// 		printf( "Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-// 	}
-
-// 	return loadedSurface;
-// }
-
 
 
 int main( int argc, char* args[] )
@@ -208,10 +257,12 @@ int main( int argc, char* args[] )
 		//Load media
 		if( !loadMedia() )
 		{
+			SDL_Log("can not load jpg");
 			printf( "Failed to load media!\n" );
 		}
 		else
 		{	
+			SDL_Log("okk");
 			//Main loop flag
 			bool quit = false;
 
