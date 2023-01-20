@@ -123,7 +123,7 @@ bool loadMedia()
 	}
 
 	//Load up surface
-	gKeyPressSurfaces[ KEY_PRESS_SURFACE_UP ] = loadSurface( "04_key_presses/up.bmp" );
+	gKeyPressSurfaces[ KEY_PRESS_SURFACE_UP ] = loadSurface( "bmp_24.bmp" );
 	if( gKeyPressSurfaces[ KEY_PRESS_SURFACE_UP ] == NULL )
 	{
 		printf( "Failed to load up image!\n" );
@@ -186,8 +186,18 @@ void close()
 // 	return loadedSurface;
 // }
 
+
+
 int main( int argc, char* args[] )
 {
+	//Apply the image stretched
+	SDL_Rect stretchRect;
+	stretchRect.x = 0;
+	stretchRect.y = 0;
+	stretchRect.w = SCREEN_WIDTH;
+	stretchRect.h = SCREEN_HEIGHT;
+
+
 	//Start up SDL and create window
 	if( !init() )
 	{
@@ -225,11 +235,18 @@ int main( int argc, char* args[] )
 					//User presses a key
 					else if( e.type == SDL_KEYDOWN )
 					{
+						
+					//SDL_BlitSurface( gCurrentSurface, NULL, gScreenSurface, NULL );
+
+					//Apply the current image
+					SDL_BlitSurface( gCurrentSurface, NULL, gScreenSurface, NULL );
+
 						//Select surfaces based on key press
 						switch( e.key.keysym.sym )
 						{
 							case SDLK_UP:
 							gCurrentSurface = gKeyPressSurfaces[ KEY_PRESS_SURFACE_UP ];
+							
 							break;
 
 							case SDLK_DOWN:
@@ -250,11 +267,7 @@ int main( int argc, char* args[] )
 						}
 					}
 				}
-
-				
-
-				//Apply the current image
-				SDL_BlitSurface( gCurrentSurface, NULL, gScreenSurface, NULL );
+				SDL_BlitScaled( gCurrentSurface, NULL, gScreenSurface, &stretchRect );
 			
 				//Update the surface
 				SDL_UpdateWindowSurface( gWindow );
